@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         Jump();
+        RotatePlayer();
         if(Input.GetKeyDown(KeyCode.Return))
         {
             transform.position = new Vector2(0,0);
@@ -37,7 +38,11 @@ public class PlayerMovement : MonoBehaviour
     }
     private void RotatePlayer()
     {
-        transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Lerp(transform.eulerAngles.z, transform.eulerAngles.z - 90, Time.deltaTime));
+        if((int)transform.eulerAngles.z % 90 != 0 || GroundCheck() == false)
+        {
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 
+                Mathf.Lerp(transform.eulerAngles.z, transform.eulerAngles.z - 90, Time.deltaTime * 3.32f));
+        }
     }
     private bool GroundCheck() => 
         Physics2D.OverlapBox(foot.position, footSize, 0, groundLayer);
